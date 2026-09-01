@@ -1,0 +1,43 @@
+﻿@model EXERCISE_MVC.Models.Urun
+
+@{
+    ViewData["Title"] = Model.Ad + " Detayı";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h2 class="mb-0">Ürün Detayı</h2>
+                </div>
+                <div class="card-body">
+                    <h3 class="text-primary">@Model.Ad</h3>
+                    <hr />
+                    <p class="lead">GÜNES-MALL güvencesiyle sunulan bu ürünün tüm kontrolleri yapılmıştır.</p>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <h4 class="text-success mb-0">Fiyat: @Model.Fiyat.ToString("C2")</h4>
+                        <span class="badge bg-secondary">Ürün ID: #@Model.Id</span>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light d-flex justify-content-between">
+                    @* 1. AKSİYON: LİSTEYE DÖNÜŞ *@
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">
+                        Listeye Geri Dön
+                    </a>
+
+                    @* 2. AKSİYON: SEPETE EKLE (BURAYA DİKKAT!) *@
+                    @* asp-action, Controller'daki metodun adıyla BİREBİR aynı olmalı *@
+                    <a asp-controller="Home"
+                       asp-action="SepeteEkle"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-success">
+                        Sepete Ekle
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

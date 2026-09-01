@@ -1,0 +1,28 @@
+﻿@model EXERCISE_MVC.Models.SiparisBilgileri
+
+<div class="container mt-5 text-center" style="max-width: 600px;">
+    <div class="card shadow-sm border-success">
+        <div class="card-body p-5">
+            <div class="mb-4">
+                <!-- Şık bir onay ikonu -->
+                <span style="font-size: 4rem;">🎉</span>
+            </div>
+
+            <!-- DEĞİŞEN KISIM: Ad ve Soyadı yeni modele uygun olarak ayrı ayrı çağırıyoruz -->
+            <h2 class="text-success mb-3">Tebrikler @Model.Ad @Model.Soyad!</h2>
+
+            <p class="lead text-muted">Siparişiniz başarıyla alındı ve Murtaza tarafından depoda hazırlanmaya başlandı.</p>
+
+            <hr class="my-4">
+
+            <div class="text-start bg-light p-3 rounded mb-4">
+                <small class="text-secondary d-block"><strong>📍 Teslimat Adresi:</strong> @Model.Adres</small>
+                <small class="text-secondary d-block mt-2"><strong>📞 İletişim:</strong> @Model.Telefon</small>
+            </div>
+
+            <a href="/Home/Index" class="btn btn-success btn-lg w-100 shadow-sm">
+                🏠 Ana Sayfaya Dön ve Alışverişe Devam Et
+            </a>
+        </div>
+    </div>
+</div>

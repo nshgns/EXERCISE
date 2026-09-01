@@ -1,0 +1,93 @@
+﻿@model EXERCISE_MVC.Models.Urun
+
+@{
+    ViewData["Title"] = "Yeni Ürün Ekle";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            @* Geri Dönüş Butonu *@
+            <div class="mb-3">
+                <a asp-controller="Admin" asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Panel Listesine Dön
+                </a>
+            </div>
+
+            <div class="card shadow border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <h4 class="mb-0 fw-bold">📦 Yeni Ürün Ekleme Formu</h4>
+                </div>
+                <div class="card-body p-4">
+
+                    @* EN KRİTİK NOKTA: enctype="multipart/form-data" resim/dosya yüklemek için ŞARTTIR! *@
+                    <form asp-controller="Admin" asp-action="Create" method="post" enctype="multipart/form-data">
+
+                        @* Genel Hata Özeti (Eğer validasyona takılırsa en tepede listeler) *@
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        @* Ürün Adı Girişi *@
+                        <div class="mb-3">
+                            <label asp-for="Ad" class="form-label fw-bold">Ürün Adı</label>
+                            <input asp-for="Ad" class="form-control" placeholder="Örn: Kablosuz Kulaklık" />
+                            <span asp-validation-for="Ad" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            @* Ürün Fiyatı Girişi *@
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Fiyat" class="form-label fw-bold">Satış Fiyatı (TL)</label>
+                                <input asp-for="Fiyat" type="number" step="0.01" class="form-control" placeholder="0.00" />
+                                <span asp-validation-for="Fiyat" class="text-danger small"></span>
+                            </div>
+
+                            @* Ürün Stok Girişi *@
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Stok" class="form-label fw-bold">Stok Adedi</label>
+                                <input asp-for="Stok" type="number" class="form-control" placeholder="Örn: 50" />
+                                <span asp-validation-for="Stok" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        @* Kategori Seçimi *@
+                        <div class="mb-3">
+                            <label asp-for="Kategori" class="form-label fw-bold">Kategori</label>
+                            <select asp-for="Kategori" class="form-select">
+                                <option value="">-- Kategori Seçiniz --</option>
+                                <option value="Elektronik">Elektronik</option>
+                                <option value="Aksesuar">Aksesuar</option>
+                            </select>
+                            <span asp-validation-for="Kategori" class="text-danger small"></span>
+                        </div>
+
+                        @* Ürün Görseli Yükleme Alanı *@
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Ürün Görseli</label>
+                            @* name="resimDosyasi" ismi AdminController'daki parametre ismiyle birebir AYNI olmalıdır! *@
+                            <input type="file" name="resimDosyasi" class="form-control" accept="image/*" />
+                            <p class="text-muted small mt-1">Sadece görsel dosyaları (.jpg, .png, .jpeg) kabul edilir.</p>
+                        </div>
+
+                        @* Kaydetme Butonu *@
+                        <div class="d-grid border-top pt-3">
+                            <button type="submit" class="btn btn-success btn-lg fs-6 fw-bold">
+                                <i class="bi bi-check-circle"></i> Ürünü Veritabanına Kaydet
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@* İstemci Taraflı (Client-Side) Validasyon Desteği *@
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

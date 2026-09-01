@@ -1,0 +1,52 @@
+﻿@model IEnumerable<EXERCISE_MVC.Models.Siparis>
+
+@{
+    ViewData["Title"] = "Gelen Siparişler";
+}
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h3 class="mb-0"><i class="bi bi-box-seam"></i> GÜNES-MALL - Sipariş Kontrol Paneli</h3>
+            <span class="badge bg-primary">Toplam Sipariş: @Model.Count()</span>
+        </div>
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info text-center">Henüz kaydedilmiş bir sipariş yok.</div>
+            }
+            else
+            {
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Sipariş No</th>
+                            <th>Müşteri Ad Soyad</th>
+                            <th>Telefon</th>
+                            <th>Tarih</th>
+                            <th>Toplam Tutar</th>
+                            <th class="text-center">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var siparis in Model)
+                        {
+                            <tr>
+                                <td><strong>#@siparis.Id</strong></td>
+                                <td>@siparis.Ad @siparis.Soyad</td>
+                                <td>@siparis.Telefon</td>
+                                <td>@siparis.SiparisTarihi.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td class="text-success fw-bold">@siparis.ToplamTutar.ToString("C2")</td>
+                                <td class="text-center">
+                                    <a asp-action="SiparisDetay" asp-route-id="@siparis.Id" class="btn btn-sm btn-info text-white">
+                                        <i class="bi bi-search"></i> İncele
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+﻿@model EXERCISE_MVC.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card shadow border-0 rounded-3">
+            <div class="card-header bg-dark text-white text-center py-3">
+                <h4 class="mb-0 fw-bold">GÜNES-MALL</h4>
+                <small class="text-light">Hesabınıza Giriş Yapın</small>
+            </div>
+            <div class="card-body p-4">
+
+                @* Kayıt sayfasından başarıyla yönlendirilen kullanıcılar için bildirim *@
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        ✨ @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @* Genel hata mesajlarını (E-posta/Şifre yanlış gibi) en üstte göstermek için *@
+                @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""]?.Errors.Count > 0)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @Html.ValidationSummary(true, "", new { @class = "mb-0 list-unstyled" })
+                    </div>
+                }
+
+                <form asp-action="Login" asp-controller="Account" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <!-- E-Posta Alanı -->
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-semibold">E-Posta Adresi</label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="ornek@gmail.com" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Şifre Alanı -->
+                    <div class="mb-3">
+                        <label asp-for="Sifre" class="form-label fw-semibold">Şifre</label>
+                        <input asp-for="Sifre" type="password" class="form-control" placeholder="******" />
+                        <span asp-validation-for="Sifre" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Giriş Butonu -->
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-dark btn-lg">Giriş Yap</button>
+                    </div>
+                </form>
+
+            </div>
+            <div class="card-footer bg-light text-center py-3">
+                <p class="mb-0 text-muted small">Hesabınız yok mu? <a href="/Account/Register" class="text-dark fw-bold decoration-none">Hemen Kayıt Olun</a></p>
+            </div>
+        </div>
+
+
+        <!-- Test Bilgilendirme Kutusu -->
+        <!-- <div class="card mt-3 bg-light border-info">
+              <div class="card-body py-2 text-center text-muted small">
+                  💡 <strong>Test Bilgileri:</strong><br>
+                  Admin: <code>admin@gunesmall.com</code> / Şifre: <code>123456</code><br>
+                  Müşteri: <code>customer@gmail.com</code> / Şifre: <code>123456</code>
+              </div>
+          </div>
+          -->
+
+    </div>
+</div>

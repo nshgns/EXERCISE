@@ -1,0 +1,42 @@
+﻿@model EXERCISE_MVC.Models.SiparisBilgileri
+
+<div class="container mt-5" style="max-width: 600px;">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white text-center py-3">
+            <h4 class="mb-0">📦 Teslimat ve Ödeme Bilgileri</h4>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="SiparisiTamamla" method="post">
+
+                <!-- Ad ve Soyad Yan Yana -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label font-weight-bold">Adınız</label>
+                        <input asp-for="Ad" class="form-control" placeholder="Örn: Murtaza" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label font-weight-bold">Soyadınız</label>
+                        <input asp-for="Soyad" class="form-control" placeholder="Örn: Yılmaz" required />
+                    </div>
+                </div>
+
+                <!-- Telefon -->
+                <div class="mb-3">
+                    <label class="form-label font-weight-bold">Telefon Numaranız</label>
+                    <input asp-for="Telefon" type="tel" class="form-control" placeholder="05xx xxx xx xx" required />
+                </div>
+
+                <!-- Adres -->
+                <div class="mb-4">
+                    <label class="form-label font-weight-bold">Teslimat Adresi</label>
+                    <textarea asp-for="Adres" class="form-control" rows="3" placeholder="Lütfen tam adresinizi yazınız..." required></textarea>
+                </div>
+
+                <!-- Onay Butonu -->
+                <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm">
+                    🛒 Siparişi Güvenle Onayla
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

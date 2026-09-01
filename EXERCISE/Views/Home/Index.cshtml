@@ -1,0 +1,130 @@
+﻿@model IEnumerable<EXERCISE_MVC.Models.Urun>
+
+@{
+    ViewData["Title"] = "Güneş-Mall | Mağaza";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2 class="display-6 fw-bold text-primary">Mağazamız</h2>
+            <p class="text-muted">En kaliteli ürünler, en uygun fiyatlarla.</p>
+        </div>
+    </div>
+
+    @* Search & Filter Section (Arama ve Filtre Bölümü) *@
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-8">
+            <form asp-controller="Home" asp-action="Index" method="get" class="shadow-sm p-3 bg-white rounded border">
+                @* KRİTİK DEĞİŞİKLİK: Kategori seçiliyken arama yapılırsa kategorinin kaybolmaması için gizli input *@
+                <input type="hidden" name="kategori" value="@ViewBag.SelectedKategori" />
+
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control border-0"
+                           placeholder="Ürün adı ile ara..." value="@ViewBag.SearchTerm" />
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-search"></i> Ara
+                    </button>
+                    @if (!string.IsNullOrEmpty(ViewBag.SearchTerm) || !string.IsNullOrEmpty(ViewBag.SelectedKategori))
+                    {
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Filtreleri Temizle</a>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @* Kategori Butonları (Doğru ve Şık Konumlandırma) *@
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <div class="btn-group shadow-sm" role="group" aria-label="Kategoriler">
+                @* Eğer kategori seçilmemişse bu buton aktif (dark) olsun *@
+                <a asp-controller="Home" asp-action="Index" name="search" value="@ViewBag.SearchTerm"
+                   class="btn @(string.IsNullOrEmpty(ViewBag.SelectedKategori) ? "btn-dark" : "btn-outline-dark")">Hepsi</a>
+
+                @* Kategori değişirken arama terimini de koruyoruz (asp-route-search) *@
+                <a asp-controller="Home" asp-action="Index" asp-route-kategori="Elektronik" asp-route-search="@ViewBag.SearchTerm"
+                   class="btn @(ViewBag.SelectedKategori == "Elektronik" ? "btn-dark" : "btn-outline-dark")">Elektronik</a>
+
+                <a asp-controller="Home" asp-action="Index" asp-route-kategori="Aksesuar" asp-route-search="@ViewBag.SearchTerm"
+                   class="btn @(ViewBag.SelectedKategori == "Aksesuar" ? "btn-dark" : "btn-outline-dark")">Aksesuar</a>
+            </div>
+        </div>
+    </div>
+
+    @* Products Grid (Ürün Galerisi) *@
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var urun in Model)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm border-0 hover-shadow transition">
+
+                        @* ÜRÜN GÖRSELİ *@
+                        <div class="card-img-top text-center bg-light" style="height: 200px; overflow: hidden;">
+                            @if (!string.IsNullOrEmpty(urun.ResimYolu))
+                            {
+                                <img src="~/img/@urun.ResimYolu" class="img-fluid h-100" style="object-fit: cover;" alt="@urun.Ad" />
+                            }
+                            else
+                            {
+                                <div class="h-100 d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-image display-1 text-secondary"></i>
+                                </div>
+                            }
+                        </div>
+
+                        @* ÜRÜN BİLGİLERİ VE İNCELE BUTONU *@
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-dark">@urun.Ad</h5>
+                            <p class="card-text text-muted small">Harika özelliklere sahip @urun.Ad şimdi Güneş-Mall'da!</p>
+
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="h5 mb-0 text-success fw-bold">@urun.Fiyat.ToString("C2")</span>
+
+                                <a asp-controller="Home" asp-action="Detay" asp-route-id="@urun.Id" class="btn btn-sm btn-info text-white">
+                                    <i class="bi bi-eye"></i> İncele
+                                </a>
+                            </div>
+                        </div>
+
+                        @* EN ALT KISIM: Tek Buton Mimarisi *@
+                        <div class="card-footer bg-transparent border-0 pb-3">
+                            <div class="d-grid">
+                                @if (urun.Stok > 0)
+                                {
+                                    @* Tag Helper yapısına geçirildi *@
+                                    <a asp-controller="Home" asp-action="SepeteEkle" asp-route-id="@urun.Id" class="btn btn-success">
+                                        <i class="bi bi-cart-plus"></i> Sepete Ekle
+                                    </a>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-danger" disabled>
+                                        <i class="bi bi-x-circle"></i> Stokta Kalmadı
+                                    </button>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <div class="alert alert-warning shadow-sm">
+                    <h4 class="alert-heading">Üzgünüz!</h4>
+                    <p class="mb-0">Aradığınız kriterlere uygun ürün bulunamadı.</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@* Style ve Script sectionları genellikle sayfa kodlarının en altında bırakılır, bu doğru bir kullanım *@
+@section Style {
+    <link href="~/stylesheet.css" rel="stylesheet" />
+}

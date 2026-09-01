@@ -1,0 +1,111 @@
+﻿@model EXERCISE_MVC.Models.Siparis
+
+@{
+    ViewData["Title"] = "Sipariş Detayı";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-person-lines-fill"></i> Müşteri & Teslimat Bilgileri</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Sipariş No:</strong> #@Model.Id</p>
+                    <p><strong>Ad Soyad:</strong> @Model.Ad @Model.Soyad</p>
+                    <p><strong>Telefon:</strong> @Model.Telefon</p>
+                    <p><strong>Sipariş Tarihi:</strong> @Model.SiparisTarihi.ToString("dd.MM.yyyy HH:mm")</p>
+                    <hr />
+                    <p><strong>Kargo Adresi:</strong></p>
+                    <div class="p-3 bg-light rounded border">
+                        @Model.Adres
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-basket3-fill"></i> Sipariş İçeriği (Sepet Detayı)</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Ürün</th>
+                                <th>Adet</th>
+                                <th class="text-end">Fiyat</th>
+                                <th class="text-end">Toplam</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detay in Model.SiparisDetaylari)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@detay.Urun?.Ad</strong>
+                                        <br /><small class="text-muted">Kategori: @detay.Urun?.Kategori</small>
+                                    </td>
+                                    <td>@detay.Adet adet</td>
+                                    <td class="text-end">@detay.AnlikFiyat.ToString("C2")</td>
+                                    <td class="text-end fw-bold">@((detay.AnlikFiyat * detay.Adet).ToString("C2"))</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-light">
+                                <td colspan="3" class="text-end <strong>">Genel Toplam:</td>
+                                <td class="text-end text-success fw-bold h5">@Model.ToplamTutar.ToString("C2")</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="d-grid mt-3">
+                        <a asp-action="Siparisler" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Sipariş Listesine Dön</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mt-4">
+        <div class="card-header bg-warning text-dark fw-bold">
+            <i class="bi bi-gear-fill"></i> Sipariş Yönetim Aksiyonları
+        </div>
+        <div class="card-body">
+            <p>
+                <strong>Mevcut Durum:</strong>
+                <span class="badge bg-secondary">@Model.Durum.ToString()</span>
+            </p>
+
+            <div class="d-grid gap-2">
+                @if (Model.Durum != EXERCISE_MVC.Models.SiparisDurumu.KargoyaVerildi &&
+                                Model.Durum != EXERCISE_MVC.Models.SiparisDurumu.TeslimEdildi &&
+                                Model.Durum != EXERCISE_MVC.Models.SiparisDurumu.IptalEdildi)
+                {
+                    <a asp-action="SiparisKargola" asp-route-id="@Model.Id" class="btn btn-success text-white">
+                        <i class="bi bi-truck"></i> Kargoya Verildi Yap
+                    </a>
+                }
+
+                @if (Model.Durum == EXERCISE_MVC.Models.SiparisDurumu.KargoyaVerildi)
+                {
+                    <a asp-action="SiparisTeslimEt" asp-route-id="@Model.Id" class="btn btn-primary text-white">
+                        <i class="bi bi-house-door-fill"></i> Teslim Edildi Yap
+                    </a>
+                }
+
+                @if (Model.Durum != EXERCISE_MVC.Models.SiparisDurumu.IptalEdildi &&
+                                Model.Durum != EXERCISE_MVC.Models.SiparisDurumu.TeslimEdildi)
+                {
+                    <a asp-action="SiparisIptal" asp-route-id="@Model.Id"
+                       class="btn btn-danger text-white"
+                       onclick="return confirm('Bu siparişi iptal etmek ve stokları geri yüklemek istediğin"ize emin misiniz?');">
+                        <i class="bi bi-x-circle-fill"></i> Siparişi İptal Et (Stok İade)
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

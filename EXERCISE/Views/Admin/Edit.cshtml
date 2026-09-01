@@ -1,0 +1,106 @@
+﻿@model EXERCISE_MVC.Models.Urun
+
+@{
+    ViewData["Title"] = "Ürünü Düzenle";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="mb-3">
+                <a asp-controller="Admin" asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Panel Listesine Dön
+                </a>
+            </div>
+
+            <div class="card shadow border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <h4 class="mb-0 fw-bold">📝 Ürün Düzenleme Formu</h4>
+                </div>
+                <div class="card-body p-4">
+
+                    <form asp-controller="Admin" asp-action="Edit" method="post" enctype="multipart/form-data">
+
+                        @* ÇOK KRİTİK: Hidden Input. Ürünün ID'sini formda gizli tutmalıyız ki *@
+                        @* SQL hangi ürünü güncelleyeceğini ayırt edebilsin! *@
+                        <input type="hidden" asp-for="Id" />
+
+                        @* Mevcut resmin adını da gizli alanda taşıyoruz *@
+                        <input type="hidden" asp-for="ResimYolu" />
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        @* Ürün Adı *@
+                        <div class="mb-3">
+                            <label asp-for="Ad" class="form-label fw-bold">Ürün Adı</label>
+                            <input asp-for="Ad" class="form-control" />
+                            <span asp-validation-for="Ad" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            @* Fiyat *@
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Fiyat" class="form-label fw-bold">Satış Fiyatı (TL)</label>
+                                <input asp-for="Fiyat" type="number" step="0.01" class="form-control" />
+                                <span asp-validation-for="Fiyat" class="text-danger small"></span>
+                            </div>
+
+                            @* Stok *@
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Stok" class="form-label fw-bold">Stok Adedi</label>
+                                <input asp-for="Stok" type="number" class="form-control" />
+                                <span asp-validation-for="Stok" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        @* Kategori *@
+                        <div class="mb-3">
+                            <label asp-for="Kategori" class="form-label fw-bold">Kategori</label>
+                            <select asp-for="Kategori" class="form-select">
+                                <option value="Elektronik">Elektronik</option>
+                                <option value="Aksesuar">Aksesuar</option>
+                            </select>
+                            <span asp-validation-for="Kategori" class="text-danger small"></span>
+                        </div>
+
+                        @* MEVCUT GÖRSELİ GÖSTERME ALANI (Yeni eklendi)*@
+                        <div class="mb-3">
+                            <label class="form-label d-block fw-bold">Mevcut Ürün Görseli</label>
+                            @if (!string.IsNullOrEmpty(Model.ResimYolu))
+                            {
+                                <img src="~/img/@Model.ResimYolu" class="img-thumbnail mb-2" style="max-width: 150px; max-height: 150px; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <p class="text-muted small">Bu ürünün henüz bir görseli yok.</p>
+                            }
+                        </div>
+
+                        @* YENİ GÖRSEL SEÇME ALANI *@
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Görseli Değiştir (İsteğe Bağlı)</label>
+                            <input type="file" name="yeniResimDosyasi" class="form-control" accept="image/*" />
+                            <p class="text-muted small mt-1">Eğer resmi değiştirmek istemiyorsanız boş bırakın.</p>
+                        </div>
+
+                        <div class="d-grid border-top pt-3">
+                            <button type="submit" class="btn btn-primary btn-lg fs-6 fw-bold">
+                                <i class="bi bi-save"></i> Değişiklikleri Kaydet
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
